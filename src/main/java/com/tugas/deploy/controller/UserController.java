@@ -1,19 +1,23 @@
 package com.tugas.deploy.controller;
 
+import com.tugas.deploy.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class UserController {
 
-    // Hardcoded credentials (replace "123456" with your actual NIM)
+    // Hardcoded credentials
     private static final String USERNAME = "admin";
-    private static final String PASSWORD = "123456"; // Change to your NIM
+    private static final String PASSWORD = "20230140108"; // Replace with your NIM
+
+    // Temporary storage (in-memory)
+    private static List<User> mahasiswaList = new ArrayList<>();
 
     @GetMapping("/login")
     public String showLoginPage() {
@@ -27,9 +31,7 @@ public class UserController {
             HttpSession session,
             Model model) {
 
-        // Simple validation
         if (USERNAME.equals(username) && PASSWORD.equals(password)) {
-            // Store user in session
             session.setAttribute("user", username);
             return "redirect:/home";
         } else {
@@ -40,19 +42,56 @@ public class UserController {
 
     @GetMapping("/home")
     public String showHomePage(HttpSession session, Model model) {
-        // Check if user is logged in
         if (session.getAttribute("user") == null) {
             return "redirect:/login";
         }
 
-        model.addAttribute("username", session.getAttribute("user"));
+        model.addAttribute("mahasiswaList", mahasiswaList);
         return "home";
+    }
+
+    @GetMapping("/form")
+    public String showFormPage(HttpSession session, Model model) {
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("user", new User());
+        return "form";
+    }
+
+    @PostMapping("/save")
+    public String saveData(
+            @ModelAttribute User user,
+            HttpSession session) {
+
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login";
+        }
+
+        // Add to temporary list
+        mahasiswaList.add(user);
+        return "redirect:/home";
+    }
+
+    @PostMapping("/delete")
+    public String deleteData(
+            @RequestParam String nim,
+            HttpSession session) {
+
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login";
+        }
+
+        // Remove from list
+        mahasiswaList.removeIf(m -> m.getNim().equals(nim));
+        return "redirect:/home";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/login?logout";
+        return "redirect:/login";
     }
 
     @GetMapping("/")
