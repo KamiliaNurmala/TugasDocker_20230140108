@@ -1,11 +1,11 @@
-##Screenshot 10 hal : 
-###1.	Halaman image docker desktop (setelah push image project dan pull image dari teman) 
+## Screenshot 10 hal : 
+### 1.	Halaman image docker desktop (setelah push image project dan pull image dari teman) 
 <img width="975" height="509" alt="image" src="https://github.com/user-attachments/assets/3ca8ed88-4c60-4720-9846-1d7dec681e60" />
 
-###2.	Halaman container docker desktop (setelah membuat container dari image dari teman) 
+### 2.	Halaman container docker desktop (setelah membuat container dari image dari teman) 
 <img width="975" height="548" alt="image" src="https://github.com/user-attachments/assets/52cd1d9b-bb9a-4401-8e91-2cc5c38ac115" />
 
-###3.	Halaman web masing masing pastikan di run dari docker 
+### 3.	Halaman web masing masing pastikan di run dari docker 
   screenshot : 
  • Halaman login 
  <img width="975" height="515" alt="image" src="https://github.com/user-attachments/assets/f8df1840-cb83-44c7-b814-9613af1b939c" />
@@ -19,7 +19,7 @@
  • Halaman home setelah input 
  <img width="975" height="516" alt="image" src="https://github.com/user-attachments/assets/96734d1e-7c92-40ea-828f-9ecc76ede912" />
 
-###4. Halaman web teman yang di pull 4 screenshot: 
+### 4. Halaman web teman yang di pull 4 screenshot: 
 • Halaman login 
  <img width="975" height="518" alt="image" src="https://github.com/user-attachments/assets/60ef73c9-6cf5-4c74-934e-0d89bf3d26b6" />
 
