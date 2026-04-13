@@ -1,10 +1,179 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #f5f7fa;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .add-link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .add-link:hover {
+            text-decoration: underline;
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding: 0 30px;
+        }
+
+        .table-container {
+            padding: 0 30px 30px 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid #007bff;
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid #e1e4e8;
+            text-align: center;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f7fa;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+
+        .logout-link {
+            display: block;
+            padding: 20px 30px;
+            color: #007bff;
+            text-decoration: none;
+            border-top: 1px solid #e1e4e8;
+            margin-top: 20px;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+            background-color: #f5f7fa;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <div class="header">
+        <h1>MY Website 20210140019</h1>
+        <p class="welcome-text">Selamat datang di aplikasi</p>
+        <a th:href="@{/form}" class="add-link">+ Input Data Mahasiswa</a>
+    </div>
 
+    <div class="section-title">Data Mahasiswa</div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>NIM</th>
+                <th>Jenis Kelamin</th>
+                <th>Aksi</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(mahasiswaList)}">
+                <td colspan="5" class="no-data">Belum ada data</td>
+            </tr>
+            <tr th:each="mhs, iterStat : ${mahasiswaList}">
+                <td th:text="${iterStat.count}">1</td>
+                <td th:text="${mhs.nama}">Nama</td>
+                <td th:text="${mhs.nim}">NIM</td>
+                <td th:text="${mhs.jenisKelamin}">L/P</td>
+                <td>
+                    <form th:action="@{/delete}" method="post" style="display: inline;">
+                        <input type="hidden" name="nim" th:value="${mhs.nim}">
+                        <button type="submit" class="btn-delete" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a th:href="@{/logout}" class="logout-link">Logout</a>
+</div>
 </body>
 </html>
