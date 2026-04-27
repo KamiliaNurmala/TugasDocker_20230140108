@@ -1,41 +1,23 @@
 package com.tugas.deploy.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@Builder
+@Table(name="20230140108_users")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
+    @Id
+    private String Id;
     private String nama;
     private String nim;
-    private String jenisKelamin;
-
-    // Constructors
-    public User() {}
-
-    public User(String nama, String nim, String jenisKelamin) {
-        this.nama = nama;
-        this.nim = nim;
-        this.jenisKelamin = jenisKelamin;
-    }
-
-    // Getters and Setters
-    public String getNama() {
-        return nama;
-    }
-
-    public void setNama(String nama) {
-        this.nama = nama;
-    }
-
-    public String getNim() {
-        return nim;
-    }
-
-    public void setNim(String nim) {
-        this.nim = nim;
-    }
-
-    public String getJenisKelamin() {
-        return jenisKelamin;
-    }
-
-    public void setJenisKelamin(String jenisKelamin) {
-        this.jenisKelamin = jenisKelamin;
-    }
+    private String jenisKelamin;;
 }

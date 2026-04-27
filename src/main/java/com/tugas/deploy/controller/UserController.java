@@ -1,101 +1,72 @@
 package com.tugas.deploy.controller;
 
 import com.tugas.deploy.model.User;
+import com.tugas.deploy.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 public class UserController {
 
-    // Hardcoded credentials
-    private static final String USERNAME = "admin";
-    private static final String PASSWORD = "20230140108"; // Replace with your NIM
+    private final UserService userService;
 
-    // Temporary storage (in-memory)
-    private static List<User> mahasiswaList = new ArrayList<>();
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    @GetMapping("/login")
-    public String showLoginPage() {
+    // ── AUTH ──────────────────────────────────────────────
+    @GetMapping("/")
+    public String loginPage() {
         return "login";
     }
 
     @PostMapping("/login")
-    public String processLogin(
-            @RequestParam String username,
-            @RequestParam String password,
-            HttpSession session,
-            Model model) {
-
-        if (USERNAME.equals(username) && PASSWORD.equals(password)) {
-            session.setAttribute("user", username);
+    public String prosesLogin(@RequestParam String username,
+                              @RequestParam String password,
+                              Model model) {
+        if ("admin".equals(username) && "20230140108".equals(password)) {
             return "redirect:/home";
-        } else {
-            model.addAttribute("error", "Invalid username or password!");
-            return "login";
         }
+        model.addAttribute("error", "Username atau Password salah!");
+        return "login";
     }
 
-    @GetMapping("/home")
-    public String showHomePage(HttpSession session, Model model) {
-        if (session.getAttribute("user") == null) {
-            return "redirect:/login";
-        }
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/";
+    }
 
-        model.addAttribute("mahasiswaList", mahasiswaList);
+    // ── HOME ──────────────────────────────────────────────
+    @GetMapping("/home")
+    public String homePage(Model model) {
+        model.addAttribute("mahasiswaList", userService.getAllUser()); // fix: nama variable cocok dengan home.html
+
+        // Ganti tiga baris ini sesuai identitas masing-masing mahasiswa
+        model.addAttribute("namaOwner",  "Muhammad Farhan");         // ← nama kamu
+        model.addAttribute("greeting",   "Selamat datang, semoga harimu menyenangkan! 🎉"); // ← kata-kata kamu
+        model.addAttribute("fotoProfil", "/images/foto.jpg");        // ← taruh foto di src/main/resources/static/images/
+
         return "home";
     }
 
+    // ── FORM ──────────────────────────────────────────────
     @GetMapping("/form")
-    public String showFormPage(HttpSession session, Model model) {
-        if (session.getAttribute("user") == null) {
-            return "redirect:/login";
-        }
-
+    public String formPage(Model model) {
         model.addAttribute("user", new User());
         return "form";
     }
 
-    @PostMapping("/save")
-    public String saveData(
-            @ModelAttribute User user,
-            HttpSession session) {
-
-        if (session.getAttribute("user") == null) {
-            return "redirect:/login";
-        }
-
-        // Add to temporary list
-        mahasiswaList.add(user);
+    @PostMapping("/save")          // fix: cocokkan dengan th:action="@{/save}" di form.html
+    public String saveData(User user) {
+        userService.addUser(user);
         return "redirect:/home";
     }
 
-    @PostMapping("/delete")
-    public String deleteData(
-            @RequestParam String nim,
-            HttpSession session) {
-
-        if (session.getAttribute("user") == null) {
-            return "redirect:/login";
-        }
-
-        // Remove from list
-        mahasiswaList.removeIf(m -> m.getNim().equals(nim));
+    // ── DELETE ────────────────────────────────────────────
+    @PostMapping("/delete")        // fix: handler yang hilang
+    public String deleteData(@RequestParam String id) {
+        userService.deleteUser(id);
         return "redirect:/home";
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
-    }
-
-    @GetMapping("/")
-    public String redirectToLogin() {
-        return "redirect:/login";
     }
 }
