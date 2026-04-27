@@ -122,19 +122,27 @@
         <button type="submit" class="btn-login">Login</button>
     </form>
 </div>
+<script th:inline="javascript">
+    // Menangkap pesan error dari backend Thymeleaf
+    /*<![CDATA[*/
+    var errorMessage = /*[[${error}]]*/ null;
+    if (errorMessage !== null && errorMessage !== '') {
+        alert("Login Gagal: " + errorMessage); // Memunculkan pop-up alert
+    }
+    /*]]>*/
 
-<script>
+    // Validasi form kosong saat tombol diklik
     function validateForm() {
         var username = document.getElementById('username').value;
         var password = document.getElementById('password').value;
 
         if (username.trim() === '') {
-            alert('Please enter username');
+            alert('Username tidak boleh kosong!');
             return false;
         }
 
         if (password.trim() === '') {
-            alert('Please enter password');
+            alert('Password tidak boleh kosong!');
             return false;
         }
 
